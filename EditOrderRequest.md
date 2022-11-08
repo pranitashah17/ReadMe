@@ -1,0 +1,116 @@
+## Editing Order Request
+
+### ### 01. How suppliers are sorted:
+
+Following are the sorting conditions:
+
+- *Profit - (Descending)*.
+- *Transit Distance - (Ascending)*.
+- If *Profit* & *Distance* are same, then sorting is done acc. to *Price*.
+- *Rank - (Ascending)*.
+
+Below Code snippet explains the implemented logic:
+
+```js
+const sortOrderReqListing = listings => {
+    const mapped = listings.filter(e => e.freight !== "N/A");
+    const mappedPositive = mapped.filter(e => e.profit >= 0);
+    const mappedNegative = mapped.filter(e => e.profit < 0);
+    const unMapped = listings.filter(e => e.freight === "N/A");
+    const sortedListing = [
+        ..._.orderBy(mappedPositive, ["profit", "distance", "rank"], ["desc", "asc", "asc"]),
+        ..._.orderBy(mappedNegative, ["profit", "distance", "rank"], ["asc", "asc", "asc"]),
+        ...unMapped,
+    ];
+    return sortedListing;
+};
+```
+
+```js
+async function getAlternateListingForOrderReq(
+    db,
+    orderReq,
+    grades,
+    suppliers,
+    locations,
+    locationFreights,
+    pricingData
+) {
+    const {
+        productId,
+        productName,
+        buyerLocation,
+        quantity
+    } = orderReq;
+    const grade = grades.find(e => e.id === productId);
+    if (!grade) throw `Product Id not found in Admin ${productName} (${productId})`;
+    const alternateGrades = grades.filter(e => isAlternateGrade(e, grade));
+
+    const alternateListings = await Promise.all(
+        alternateGrades.map(e =>
+            getSupplierListingsForLocationAndGrade(
+                db,
+                grades,
+                buyerLocation,
+                e._id.toString(),
+                e,
+                [pricingData, suppliers, locations, locationFreights] //NOTE Providing this data to optimize code
+            )
+        )
+    );
+    const nonEmptyAlternateListing = alternateListings.filter(e => e.length > 0);
+
+    const groupedAlternateListing = nonEmptyAlternateListing.reduce((a, listings) => {
+        const gradeNumber = listings[0].gradeNumber;
+        const listingWithFreights = listings.map(l => {
+            const systemFreight = calculateSystemFreight(
+                locations,
+                locationFreights,
+                l.fromLoc,
+                buyerLocation,
+                quantity
+            );
+            const {
+                freight,
+                isEstimated
+            } = calcExpectedFreights(l, orderReq.quantity);
+            return {
+                ...l,
+                freight,
+                isEstimated,
+                systemFreight
+            };
+        });
+
+        const transformedListing = listingWithFreights.map(listing =>
+            transformListingForOrderReq(listing, suppliers, orderReq, locations)
+        );
+        a[gradeNumber] = sortOrderReqListing(transformedListing);
+        return a;
+    }, {});
+
+    return groupedAlternateListing;
+}
+```
+
+### 02. How suggested supplier listing is sorted:
+
+Following are sorting conditions:
+- *Distance - (Ascending)*.
+- *Past Orders - (Decending)*.
+- *Past Offers - (Decending)*
+
+Below Code snippet explains the implemented logic:
+
+```js
+const sortSuggestedSupplierListing = listings => {
+  const sortedListing = [
+    ..._.orderBy(
+      listings,
+      ["distance", "pastOrders", "pastOffers"],
+      ["asc", "desc", "desc"]
+    ),
+  ];
+  return sortedListing;
+};
+```
