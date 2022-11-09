@@ -6,16 +6,16 @@
 then the **Logistic Delay** score would **_not_** be calculated and will be displayed as blank in the orders table.
 * As soon as the the status is updated to '_Pending(LA)_', Logistic Delay score will be calculated.   
 Following are the conditions for _Pending_ status update:
-    1. If the order status is updated to Pending (LA) before 1 pm and the Dispatch Date is the same day then the logistics delay score is 0.
-    2. If the order status is updated to Pending (LA) after 1 pm and the Dispatch Date is the same day then the logistics delay score is -1.
-    3. If the order status is updated to Pending (LA) before 1 pm and the Dispatch Date is the D+1 then the logistics delay score is -1.
-    4. If the order status is updated to Pending (LA) after 1 pm and the Dispatch Date is the D+1 then the logistics delay score is -1.
+    1. If the order status is updated to _Pending (LA)_ **before 1 pm** and the Dispatch Date is the same day then the Logistics Delay score is **0**.
+    2. If the order status is updated to *Pending (LA)* **after 1 pm** and the Dispatch Date is the same day then the Logistics Delay score is **-1**.
+    3. If the order status is updated to *Pending (LA)* **before 1 pm** and the Dispatch Date is the D+1 then the Logistics Delay score is **-1**.
+    4. If the order status is updated to *Pending (LA)* **after 1 pm** and the Dispatch Date is the D+1 then the Logistics Delay score is **-1**.
 
 * For split orders, consider the time when the status of an individual order is updated to either Pending (LA) or Enquiry Sent and calculate the Logistic Delay score accordingly.
 
-* In cases where the order is split after sending an enquiry, the Logistic Delay score of the parent order should be updated in the child order.
+* In cases where the order is split after sending an enquiry, the Logistic Delay score of the Parent order should be updated in the Child order.
 
-* In the case of Parent-Child orders, the Logistics Delay score of the child order will always be updated as '0' as we are accounting for the changes in the parent order.   
+* In the case of Parent-Child orders, the Logistics Delay score of the Child order will always be updated as '0' as we are accounting for the changes in the Parent order.   
 <br>
 
 ## Case 2 : Updating the Dispatch Date
