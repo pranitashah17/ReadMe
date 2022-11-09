@@ -325,12 +325,11 @@ const PANAvailableLimit = Math.min(groupLimit, PANLimit);
 
 ## 07. Credit Limit
 
-Credit Limit is the limit which is approved by the Credit Team.
+If customer needs a credit for more than 7 days, we need to provide a Credit Limit for such order. 
 
-Credit Limit is required when 
+Credit Limit will never exceed the Insuarance Limit / DCL.
 
 ## 08. Insuarance Limit
 
-Insuarance Limit is required when we want an entity to be able to place an order/s more than its PAN Limit.
+Any customer who needs a limit greater than 50 Lakhs, then we need to take a special approval from the Insuarance Company.
 
-Insurance Limit 
