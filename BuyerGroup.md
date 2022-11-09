@@ -238,7 +238,7 @@ function calculatePANTotalLimit(creditProfile) {
 </details>   
 <br>
 
-Note:- In a Group, available limit will change according to the group limit logic but the entity's PAN limit will never exceed the Insuarance Limit or DCL depending upon the case.   
+Note:- In a Group, available limit will change according to the group limit logic but the entity's PAN limit will never exceed the Insurance Limit or DCL depending upon the case.   
 <br>
 
 ## 06. Available Limit
@@ -247,7 +247,7 @@ Available Limit is based on the group level.
 
 Available Limit is the amount remaining upto which an entity can place an order/s.
 
-Availabe Limit is dependent on Group's Limit, Group's Outstanding, DCL or Insuarance Limit.
+Availabe Limit is dependent on Group's Limit, Group's Outstanding, DCL or Insurance Limit.
 
 Available Limit is calculated by the formula:
   * Available Limit == min[(Group Limit - Group Outstanding), X],
@@ -329,7 +329,7 @@ If customer needs a credit for more than 7 days, we need to provide a Credit Lim
 
 Credit Limit will never exceed the Insuarance Limit / DCL.
 
-## 08. Insuarance Limit
+## 08. Insurance Limit
 
-Any customer who needs a limit greater than 50 Lakhs, then we need to take a special approval from the Insuarance Company.
+Any customer who needs a limit greater than 50 Lakhs, then we need to take a special approval from the Insurance Company.
 
