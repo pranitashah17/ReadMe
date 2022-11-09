@@ -325,4 +325,12 @@ const PANAvailableLimit = Math.min(groupLimit, PANLimit);
 
 ## 07. Credit Limit
 
-Credit Limit is the limit which is approved by
+Credit Limit is the limit which is approved by the Credit Team.
+
+Credit Limit is required when 
+
+## 08. Insuarance Limit
+
+Insuarance Limit is required when we want an entity to be able to place an order/s more than its PAN Limit.
+
+Insurance Limit 
