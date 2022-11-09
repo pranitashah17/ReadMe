@@ -7,6 +7,15 @@ Buyer Groups can be made based on:
 
 ## 01. Group Limit
 The group limit is the sum of the two highest limits of entities in the group.
+
+###  Why are Group Limits needed?
+Group Limits are introduced so that all the entities in a group are limited to a fixed amount and can't order above that available amount unless it is approved by the users with designation/role as **Admin / Buyer Operations / Bussiness Team**.
+
+This is done to avoid *Concentrated Risk*.
+
+<details><summary>Click For Code</summary>
+<p>
+
 ```js
 function _calculateGroupLimit(groupTotalLimit, combinedData) {
     return groupTotalLimit - combinedData.totalReceivables;
@@ -27,13 +36,22 @@ function _calculateGroupTotalLimit(PANWiseData) {
       }
       return groupTotalLimit;
     }
-```
+```  
+
+</p>
+</details>   
+<br>
+
 
 ## 02. Group Payment Category
 
 The group payment categories are '*ADVANCED*' and '*DELIVERED*'.
 
 A new group has a default payment category as *'DELIVERY + 1'*.
+
+<details><summary>Click For Code</summary>
+<p>
+
 ```js
 async _createNewGroup(buyerEntityObj, PAN, creditProfileSection, session) {
     const buyerGroupObj = {
@@ -56,7 +74,16 @@ async _createNewGroup(buyerEntityObj, PAN, creditProfileSection, session) {
       .createGroup(buyerGroupObj, { session });
 }
 ```
+
+</p>
+</details>   
+<br>
+
 If in a group an entity places order againts advance then the Group Payment Category is changed to ADVANCED for all entities.
+
+<details><summary>Click For Code</summary>
+<p>
+
 ```js
   async recomputeGroupPaymentCategory(
     newGroupPaymentCategory,
@@ -82,7 +109,9 @@ If in a group an entity places order againts advance then the Group Payment Cate
     }
   }
 ```
-
+</p>
+</details>   
+<br>
 
 --------(still remaining)---------
    
@@ -143,6 +172,9 @@ Following is the table for Slab Limit:
 <br>
 
 ## 05. Total Limit
+
+Total Limit is the limit upto which an entity can place order/s.
+
 Total limit depends on the Insaurance Limit, Credit Limit or the Slab Limit   
 
 Total limit will be:
@@ -153,6 +185,8 @@ Total limit will be:
 <br>
 
 Below Code snippet explains the implemented logic:
+<details><summary>Click For Code</summary>
+<p>
 
 ```js
 const entityPAN = entityWiseData.filter(e => e.vendorId === entityId)[0].PAN;
@@ -197,7 +231,9 @@ function calculatePANTotalLimit(creditProfile) {
   }
 }
 
-```   
+```
+</p>
+</details>   
 <br>
 
 ## 06. Available Limit
@@ -214,6 +250,8 @@ Available Limit is calculated by the formula:
       then, X = [DLC - (Entity Wise Outstanding)] 
 
 Following code snipet explains the logic:
+<details><summary>Click For Code</summary>
+<p>
 
 ```js
 const PANWiseData = Object.entries(
@@ -263,7 +301,16 @@ function _calculatePANLimit({ creditProfile, totalReceivables }) {
     }
 
 ```
+</p>
+</details>   
+<br>
+
 Thus available limit will be computed by using following code:
 ```js
 const PANAvailableLimit = Math.min(groupLimit, PANLimit);
-```
+```   
+<br>
+
+## 07. Credit Limit
+
+Credit Limit is the limit which is approved by
